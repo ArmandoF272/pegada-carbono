@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-leaf: #1f5132;
+  --color-leaf-deep: #163d25;
+  --color-leaf-soft: #d6e3d4;
+  --color-leaf-tint: #eaf0e2;
+  --color-moss: #6b8a4e;
+  --color-bg: #f4f1ea;
+  --color-bg-elev: #fbf9f4;
+  --color-ink: #16201a;
+  --color-ink-soft: #4a5a50;
+  --color-ink-mute: #8a958d;
+  --color-line: #e2dccf;
+  --color-ember: #c4612a;
+  --color-danger: #b53c2e;
+  --color-danger-soft: #f5d8d2;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-leaf text-white px-4 py-2 rounded-lg font-medium hover:bg-leaf-deep transition-colors;
+  }
+  .btn-secondary {
+    @apply bg-leaf-tint text-leaf px-4 py-2 rounded-lg font-medium hover:bg-leaf-soft transition-colors;
+  }
+  .btn-danger {
+    @apply bg-danger-soft text-danger px-4 py-2 rounded-lg font-medium hover:bg-red-200 transition-colors;
+  }
+  .card {
+    @apply bg-bg-elev rounded-2xl border border-line p-5;
+  }
+  .input-field {
+    @apply w-full border border-line rounded-lg px-3 py-2 bg-bg-elev text-ink focus:outline-none focus:ring-2 focus:ring-leaf focus:border-leaf;
+  }
+  .badge {
+    @apply text-xs font-medium px-2 py-0.5 rounded-full;
+  }
+  .badge-easy   { @apply bg-leaf-tint text-leaf; }
+  .badge-medium { @apply bg-amber-100 text-amber-700; }
+  .badge-hard   { @apply bg-red-100 text-red-700; }
+  .nav-link {
+    @apply flex flex-col items-center gap-0.5 text-xs text-ink-mute hover:text-leaf transition-colors px-3 py-1;
+  }
+  .nav-link.active { @apply text-leaf font-medium; }
+}

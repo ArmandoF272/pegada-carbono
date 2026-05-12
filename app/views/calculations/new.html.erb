@@ -1,0 +1,141 @@
+<% content_for :title, "Novo Cálculo · Pegada de Carbono" %>
+
+<div class="flex items-center gap-3 mb-5">
+  <%= link_to root_path, class: "text-ink-mute hover:text-ink" do %>
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+  <% end %>
+  <h2 class="text-base font-semibold text-ink">Novo cálculo</h2>
+</div>
+
+<div class="flex gap-1 mb-6">
+  <% 4.times do |i| %>
+    <div class="h-1 flex-1 rounded-full <%= i == 0 ? 'bg-leaf' : 'bg-line' %>"></div>
+  <% end %>
+</div>
+
+<%= form_with url: calculations_path, method: :post, class: "space-y-5" do |f| %>
+  <div class="card">
+    <p class="text-xs text-ink-mute mb-2">Mês de referência</p>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="text-xs text-ink-soft mb-1 block">Mês</label>
+        <select name="calculation[month]" class="input-field text-sm">
+          <%= meses_options %>
+        </select>
+      </div>
+      <div>
+        <label class="text-xs text-ink-soft mb-1 block">Ano</label>
+        <select name="calculation[year]" class="input-field text-sm">
+          <% (2023..Date.today.year).each do |y| %>
+            <option value="<%= y %>" <%= 'selected' if y == Date.today.year %>><%= y %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="text-xs text-leaf uppercase tracking-wide font-semibold mb-1">Passo 1 de 4</p>
+    <h3 class="text-base font-semibold text-ink mb-1">Como você se desloca?</h3>
+    <p class="text-xs text-ink-mute mb-4">Os valores são estimativas mensais.</p>
+
+    <div class="space-y-3">
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Carro / moto (km no mês)</label>
+        <div class="relative">
+          <input type="number" name="transport[car_km]" value="0" min="0" step="10" class="input-field pr-10 text-sm">
+          <span class="absolute right-3 top-2.5 text-xs text-ink-mute">km</span>
+        </div>
+      </div>
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Ônibus / metrô (km no mês)</label>
+        <div class="relative">
+          <input type="number" name="transport[bus_km]" value="0" min="0" step="10" class="input-field pr-10 text-sm">
+          <span class="absolute right-3 top-2.5 text-xs text-ink-mute">km</span>
+        </div>
+      </div>
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Voos no ano</label>
+        <div class="relative">
+          <input type="number" name="transport[flights_per_year]" value="0" min="0" class="input-field pr-16 text-sm">
+          <span class="absolute right-3 top-2.5 text-xs text-ink-mute">voos</span>
+        </div>
+        <p class="text-xs text-ink-mute mt-1">Conte cada trecho separadamente</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="text-xs text-leaf uppercase tracking-wide font-semibold mb-1">Passo 2 de 4</p>
+    <h3 class="text-base font-semibold text-ink mb-1">Consumo de energia</h3>
+    <div class="space-y-3">
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Consumo elétrico (kWh/mês)</label>
+        <div class="relative">
+          <input type="number" name="energy[kwh_consumption]" value="200" min="0" class="input-field pr-12 text-sm">
+          <span class="absolute right-3 top-2.5 text-xs text-ink-mute">kWh</span>
+        </div>
+        <p class="text-xs text-ink-mute mt-1">Veja na sua conta de luz</p>
+      </div>
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Principal fonte de energia</label>
+        <select name="energy[energy_source]" class="input-field text-sm">
+          <option value="eletricidade">Eletricidade (rede)</option>
+          <option value="solar">Solar fotovoltaica</option>
+          <option value="gas_natural">Gás natural</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="text-xs text-leaf uppercase tracking-wide font-semibold mb-1">Passo 3 de 4</p>
+    <h3 class="text-base font-semibold text-ink mb-1">Alimentação</h3>
+    <div class="space-y-3">
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Tipo de dieta</label>
+        <select name="food[diet_type]" class="input-field text-sm">
+          <option value="onivoro">Onívoro (come tudo)</option>
+          <option value="vegetariano">Vegetariano</option>
+          <option value="vegano">Vegano</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Consumo de carne vermelha (kg/mês)</label>
+        <div class="relative">
+          <input type="number" name="food[meat_kg]" value="2" min="0" step="0.5" class="input-field pr-8 text-sm">
+          <span class="absolute right-3 top-2.5 text-xs text-ink-mute">kg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="text-xs text-leaf uppercase tracking-wide font-semibold mb-1">Passo 4 de 4</p>
+    <h3 class="text-base font-semibold text-ink mb-1">Compras e consumo</h3>
+    <div class="space-y-3">
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Gasto mensal em compras (R$)</label>
+        <div class="relative">
+          <span class="absolute left-3 top-2.5 text-xs text-ink-mute">R$</span>
+          <input type="number" name="shopping[monthly_spend]" value="500" min="0" class="input-field pl-8 text-sm">
+        </div>
+      </div>
+      <div>
+        <label class="text-sm text-ink-soft block mb-1">Principal categoria</label>
+        <select name="shopping[shopping_category]" class="input-field text-sm">
+          <option value="eletronicos">Eletrônicos</option>
+          <option value="roupas">Roupas e calçados</option>
+          <option value="alimentos">Alimentos</option>
+          <option value="servicos">Serviços</option>
+          <option value="outros">Outros</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-3 pb-2">
+    <%= link_to "Voltar", root_path, class: "btn-secondary flex-1 text-center text-sm" %>
+    <%= f.submit "Calcular →", class: "btn-primary flex-1 text-sm cursor-pointer" %>
+  </div>
+<% end %>

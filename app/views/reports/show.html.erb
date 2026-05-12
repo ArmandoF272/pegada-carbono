@@ -1,0 +1,91 @@
+<% content_for :title, "Relatório · Pegada de Carbono" %>
+
+<div class="mb-4">
+  <h2 class="text-xl font-bold text-ink">Relatório</h2>
+  <p class="text-xs text-ink-mute">Acompanhe sua evolução ao longo dos meses</p>
+</div>
+
+<% if @last %>
+  <div class="card text-center mb-4">
+    <p class="text-4xl font-bold text-ink"><%= "%g" % @last.total_emission.to_f %></p>
+    <p class="text-sm text-ink-mute mb-4">tCO₂e / ano</p>
+
+    <%= pie_chart @last.emission_by_category,
+        colors: ["#1f5132", "#6b8a4e", "#c4612a", "#8a958d"],
+        donut: true,
+        height: "220px",
+        library: { plugins: { legend: { display: false } } } %>
+
+    <div class="mt-4 space-y-1 text-left">
+      <% [
+        ["Transporte",  "#1f5132"],
+        ["Energia",     "#6b8a4e"],
+        ["Alimentação", "#c4612a"],
+        ["Compras",     "#8a958d"]
+      ].each do |name, color| %>
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background: <%= color %>"></div>
+          <p class="text-sm text-ink-soft flex-1"><%= name %></p>
+          <p class="text-sm font-medium text-ink"><%= "%.2f" % @last.emission_by_category[name].to_f %> t</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @history.size > 1 %>
+    <div class="card mb-4">
+      <h3 class="text-sm font-semibold text-ink mb-3">Evolução — <%= @history.size %> meses</h3>
+      <%= bar_chart @history.map { |c| [c.reference_month.strftime("%b/%Y"), c.total_emission.to_f] },
+          colors: ["#1f5132"],
+          height: "200px",
+          library: {
+            scales: { y: { beginAtZero: true, grid: { color: "#e2dccf" } } },
+            plugins: { legend: { display: false } }
+          } %>
+      <div class="mt-2 flex gap-4">
+        <div class="flex items-center gap-1.5">
+          <div class="w-3 h-0.5 bg-ember"></div>
+          <span class="text-xs text-ink-mute">Média Brasil (<%= Calculation::BRAZIL_AVERAGE %>)</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div class="w-3 h-0.5 bg-leaf"></div>
+          <span class="text-xs text-ink-mute">Meta Paris (<%= Calculation::PARIS_GOAL %>)</span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="card">
+    <h3 class="text-sm font-semibold text-ink mb-3">Destaques</h3>
+    <% by_cat = @last.emission_by_category %>
+    <% top_cat = by_cat.max_by { |_, v| v } %>
+    <% variation = @last.variation_from_previous %>
+
+    <div class="space-y-2">
+      <% if variation && variation < 0 %>
+        <div class="flex gap-3 p-3 bg-leaf-tint rounded-xl">
+          <svg class="w-5 h-5 text-leaf flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <p class="text-xs text-ink-soft">Você reduziu <strong class="text-leaf"><%= variation.abs %> t</strong> em relação ao mês anterior. Continue assim!</p>
+        </div>
+      <% end %>
+
+      <% if top_cat %>
+        <div class="flex gap-3 p-3 bg-amber-50 rounded-xl">
+          <svg class="w-5 h-5 text-ember flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <p class="text-xs text-ink-soft"><strong><%= top_cat[0] %></strong> é sua maior categoria (<%= "%.2f" % top_cat[1] %> t). Veja as dicas para reduzir.</p>
+        </div>
+      <% end %>
+
+      <div class="flex gap-3 p-3 bg-bg rounded-xl border border-line">
+        <svg class="w-5 h-5 text-leaf flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p class="text-xs text-ink-soft">Sua pegada vs. média brasileira: <strong class="<%= @last.total_emission.to_f < Calculation::BRAZIL_AVERAGE ? 'text-leaf' : 'text-ember' %>"><%= "%.2f" % (@last.total_emission.to_f - Calculation::BRAZIL_AVERAGE) %> t</strong></p>
+      </div>
+    </div>
+  </div>
+
+<% else %>
+  <div class="card text-center py-10">
+    <p class="text-ink-mute text-sm mb-4">Nenhum dado disponível ainda.<br>Faça seu primeiro cálculo!</p>
+    <%= link_to "Calcular agora", new_calculation_path, class: "btn-primary text-sm" %>
+  </div>
+<% end %>

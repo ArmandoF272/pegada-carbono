@@ -1,0 +1,56 @@
+<% content_for :title, "Dicas · Pegada de Carbono" %>
+
+<div class="mb-4">
+  <h2 class="text-xl font-bold text-ink">Reduzir é possível</h2>
+  <p class="text-xs text-ink-mute">Ações práticas para diminuir sua pegada</p>
+</div>
+
+<div class="flex gap-2 overflow-x-auto pb-1 mb-4 scroll">
+  <%= link_to tips_path, class: "flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors #{@category.blank? ? 'bg-leaf text-white border-leaf' : 'border-line text-ink-soft hover:border-leaf'}" do %>
+    Todas
+  <% end %>
+  <% Tip::CATEGORIES.each do |cat| %>
+    <%= link_to tips_path(category: cat), class: "flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors #{@category == cat ? 'bg-leaf text-white border-leaf' : 'border-line text-ink-soft hover:border-leaf'}" do %>
+      <%= cat %>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @tips.any? %>
+  <div class="space-y-3">
+    <% @tips.each do |tip| %>
+      <div class="card">
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center <%= tip.category == 'Transporte' ? 'bg-leaf-tint' : tip.category == 'Energia' ? 'bg-amber-50' : tip.category == 'Alimentação' ? 'bg-red-50' : 'bg-blue-50' %>">
+            <% icon_color = tip.category == 'Transporte' ? 'text-leaf' : tip.category == 'Energia' ? 'text-amber-600' : tip.category == 'Alimentação' ? 'text-red-600' : 'text-blue-600' %>
+            <svg class="w-5 h-5 <%= icon_color %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <% if tip.category == 'Transporte' %>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 14l-4-4m4 4l4-4"/>
+              <% elsif tip.category == 'Energia' %>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              <% elsif tip.category == 'Alimentação' %>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              <% else %>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+              <% end %>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-ink mb-1"><%= tip.text %></p>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs text-leaf font-medium">−<%= tip.impact_tco2_year %> t/ano</span>
+              <span class="badge <%= tip.difficulty == 'Fácil' ? 'badge-easy' : tip.difficulty == 'Médio' ? 'badge-medium' : 'badge-hard' %>">
+                <%= tip.difficulty %>
+              </span>
+              <span class="text-xs text-ink-mute"><%= tip.category %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card text-center py-8">
+    <p class="text-ink-mute text-sm">Nenhuma dica encontrada para esta categoria.</p>
+  </div>
+<% end %>

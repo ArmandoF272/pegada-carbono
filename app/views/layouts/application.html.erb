@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title><%= content_for(:title) || "Pegada de Carbono" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen bg-bg">
+    <% if user_signed_in? %>
+
+      <%# ── Sidebar (desktop ≥ lg) ── %>
+      <aside class="hidden lg:flex flex-col fixed top-0 left-0 h-full w-56 bg-bg-elev border-r border-line z-40">
+        <div class="px-5 py-5 border-b border-line">
+          <div class="flex items-center gap-2 mb-0.5">
+            <div class="w-7 h-7 bg-leaf rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064"/>
+              </svg>
+            </div>
+            <span class="text-sm font-bold text-ink leading-tight">Pegada de<br>Carbono</span>
+          </div>
+        </div>
+
+        <div class="px-3 py-4 flex-1">
+          <p class="text-xs text-ink-mute px-2 mb-2 uppercase tracking-wide">Menu</p>
+          <nav class="space-y-1">
+            <%= link_to root_path, class: "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors #{current_page?(root_path) ? 'bg-leaf text-white font-medium' : 'text-ink-soft hover:bg-leaf-tint hover:text-leaf'}" do %>
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+              Início
+            <% end %>
+
+            <%= link_to calculations_path, class: "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors #{current_page?(calculations_path) ? 'bg-leaf text-white font-medium' : 'text-ink-soft hover:bg-leaf-tint hover:text-leaf'}" do %>
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Histórico
+            <% end %>
+
+            <%= link_to new_calculation_path, class: "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors #{current_page?(new_calculation_path) ? 'bg-leaf text-white font-medium' : 'text-ink-soft hover:bg-leaf-tint hover:text-leaf'}" do %>
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Novo cálculo
+            <% end %>
+
+            <%= link_to report_path, class: "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors #{current_page?(report_path) ? 'bg-leaf text-white font-medium' : 'text-ink-soft hover:bg-leaf-tint hover:text-leaf'}" do %>
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              Relatório
+            <% end %>
+
+            <%= link_to tips_path, class: "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors #{current_page?(tips_path) ? 'bg-leaf text-white font-medium' : 'text-ink-soft hover:bg-leaf-tint hover:text-leaf'}" do %>
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              Dicas
+            <% end %>
+          </nav>
+        </div>
+
+        <div class="px-5 py-4 border-t border-line">
+          <p class="text-xs text-ink-mute mb-0.5">Olá, <%= current_user.name.split.first %></p>
+          <%= button_to "Sair da conta", destroy_user_session_path, method: :delete,
+                class: "text-xs text-ink-mute hover:text-danger transition-colors bg-transparent border-none p-0 cursor-pointer font-normal" %>
+        </div>
+      </aside>
+
+      <%# ── Header mobile (< lg) ── %>
+      <header class="lg:hidden fixed top-0 left-0 right-0 z-40 bg-bg-elev border-b border-line px-4 py-3 flex items-center justify-between">
+        <div>
+          <p class="text-xs text-ink-mute">Olá, <%= current_user.name.split.first %></p>
+          <h1 class="text-sm font-semibold text-ink">Sua pegada de carbono</h1>
+        </div>
+        <%= button_to "Sair", destroy_user_session_path, method: :delete,
+              class: "text-ink-mute text-xs hover:text-danger bg-transparent border-none p-0 cursor-pointer font-normal" %>
+      </header>
+
+    <% end %>
+
+    <%# Flash messages %>
+    <% if notice.present? %>
+      <div class="fixed top-14 lg:top-4 left-0 lg:left-60 right-0 z-50 px-4 pt-2 lg:pt-0 lg:pr-6">
+        <p class="bg-leaf-tint text-leaf text-sm px-4 py-2 rounded-lg border border-leaf-soft max-w-xl"><%= notice %></p>
+      </div>
+    <% end %>
+    <% if alert.present? %>
+      <div class="fixed top-14 lg:top-4 left-0 lg:left-60 right-0 z-50 px-4 pt-2 lg:pt-0 lg:pr-6">
+        <p class="bg-danger-soft text-danger text-sm px-4 py-2 rounded-lg max-w-xl"><%= alert %></p>
+      </div>
+    <% end %>
+
+    <%# ── Conteúdo principal ── %>
+    <div class="<%= user_signed_in? ? 'lg:ml-56' : '' %> <%= user_signed_in? ? 'pt-20 lg:pt-8 pb-24 lg:pb-10' : 'pt-6 pb-6' %>">
+      <main class="max-w-3xl mx-auto px-4 lg:px-8">
+        <%= yield %>
+      </main>
+    </div>
+
+    <%# ── Bottom nav mobile (< lg) ── %>
+    <% if user_signed_in? %>
+      <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-bg-elev border-t border-line">
+        <div class="flex items-center justify-around py-2">
+          <%= link_to root_path, class: "nav-link #{current_page?(root_path) ? 'active' : ''}" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span>Início</span>
+          <% end %>
+
+          <%= link_to calculations_path, class: "nav-link #{current_page?(calculations_path) ? 'active' : ''}" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Histórico</span>
+          <% end %>
+
+          <%= link_to new_calculation_path, class: "nav-link" do %>
+            <span class="w-10 h-10 bg-leaf rounded-full flex items-center justify-center -mt-3 shadow-md">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            </span>
+          <% end %>
+
+          <%= link_to report_path, class: "nav-link #{current_page?(report_path) ? 'active' : ''}" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span>Relatório</span>
+          <% end %>
+
+          <%= link_to tips_path, class: "nav-link #{current_page?(tips_path) ? 'active' : ''}" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            <span>Dicas</span>
+          <% end %>
+        </div>
+      </nav>
+    <% end %>
+  </body>
+</html>

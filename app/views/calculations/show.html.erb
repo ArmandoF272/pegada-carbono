@@ -1,0 +1,69 @@
+<% content_for :title, "#{@calculation.formatted_month} · Pegada de Carbono" %>
+
+<div class="flex items-center justify-between mb-4">
+  <%= link_to calculations_path, class: "text-ink-mute hover:text-ink" do %>
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+  <% end %>
+  <h2 class="text-base font-semibold text-ink"><%= @calculation.formatted_month %></h2>
+  <%= link_to edit_calculation_path(@calculation), class: "text-ink-mute hover:text-leaf" do %>
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+  <% end %>
+</div>
+
+<div class="card text-center mb-4">
+  <p class="text-4xl font-bold text-ink"><%= "%g" % @calculation.total_emission.to_f %></p>
+  <p class="text-sm text-ink-mute mb-1">tCO₂e / ano</p>
+  <p class="text-xs text-ink-mute mb-4">Registrado em <%= formatar_data(@calculation.updated_at) %></p>
+
+  <%= pie_chart @calculation.emission_by_category,
+      colors: ["#1f5132", "#6b8a4e", "#c4612a", "#8a958d"],
+      donut: true,
+      height: "220px",
+      library: { plugins: { legend: { display: false } } } %>
+</div>
+
+<div class="card mb-4">
+  <h3 class="text-sm font-semibold text-ink mb-3">Por categoria</h3>
+  <% categories = [
+    { name: "Transporte",  value: @calculation.transport_activity&.emission_kg.to_f / 1000.0, color: "bg-leaf" },
+    { name: "Energia",     value: @calculation.energy_activity&.emission_kg.to_f / 1000.0,    color: "bg-moss" },
+    { name: "Alimentação", value: @calculation.food_activity&.emission_kg.to_f / 1000.0,      color: "bg-ember" },
+    { name: "Compras",     value: @calculation.shopping_activity&.emission_kg.to_f / 1000.0,  color: "bg-ink-mute" }
+  ] %>
+  <% total = @calculation.total_emission.to_f %>
+  <div class="space-y-3">
+    <% categories.each do |cat| %>
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <p class="text-sm text-ink"><%= cat[:name] %></p>
+          <p class="text-sm font-semibold text-ink"><%= "%.2f" % cat[:value] %> t</p>
+        </div>
+        <div class="h-1.5 bg-line rounded-full">
+          <% pct = total > 0 ? [(cat[:value] / total * 100).round, 100].min : 0 %>
+          <div class="<%= cat[:color] %> h-1.5 rounded-full" style="width: <%= pct %>%"></div>
+        </div>
+        <p class="text-xs text-ink-mute mt-0.5"><%= total > 0 ? (cat[:value] / total * 100).round : 0 %>%</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% unless @calculation.saved? %>
+  <%= button_to save_calculation_path(@calculation), method: :patch, class: "btn-primary w-full mb-3 text-sm" do %>
+    Salvar no histórico
+  <% end %>
+<% end %>
+
+<div class="flex gap-3">
+  <%= link_to edit_calculation_path(@calculation), class: "btn-secondary flex-1 text-sm text-center flex items-center justify-center gap-2" do %>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+    Editar
+  <% end %>
+
+  <%= button_to calculation_path(@calculation), method: :delete,
+      data: { turbo_confirm: "Tem certeza? Esta ação não pode ser desfeita." },
+      class: "btn-danger flex-1 text-sm flex items-center justify-center gap-2" do %>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+    Excluir
+  <% end %>
+</div>
