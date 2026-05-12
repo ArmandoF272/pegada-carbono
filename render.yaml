@@ -7,6 +7,8 @@ services:
     name: pegada-carbono
     runtime: docker
     plan: free
+    preDeployCommand: bundle exec rails db:prepare
+    dockerCommand: bundle exec rails server -b 0.0.0.0 -p $PORT
     envVars:
       - key: RAILS_MASTER_KEY
         sync: false
