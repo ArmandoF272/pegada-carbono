@@ -76,19 +76,15 @@
 
     <% end %>
 
-    <%# Flash messages %>
+    <%# Flash messages — toast no canto superior direito %>
     <% if notice.present? %>
-      <div class="fixed z-50 left-0 right-0 px-4 lg:px-8
-                  <%= user_signed_in? ? 'top-14 lg:top-4 lg:left-56' : 'top-4 flex justify-center' %>">
-        <p class="bg-leaf-tint text-leaf text-sm px-4 py-2 rounded-lg border border-leaf-soft
-                  <%= user_signed_in? ? 'max-w-3xl mx-auto w-full' : 'max-w-md w-full text-center' %>"><%= notice %></p>
+      <div class="fixed z-50 right-4 lg:right-6 max-w-xs w-full <%= user_signed_in? ? 'top-16 lg:top-4' : 'top-4' %>">
+        <p class="bg-leaf-tint text-leaf text-sm px-4 py-2.5 rounded-lg border border-leaf-soft shadow-md"><%= notice %></p>
       </div>
     <% end %>
     <% if alert.present? %>
-      <div class="fixed z-50 left-0 right-0 px-4 lg:px-8
-                  <%= user_signed_in? ? 'top-14 lg:top-4 lg:left-56' : 'top-4 flex justify-center' %>">
-        <p class="bg-danger-soft text-danger text-sm px-4 py-2 rounded-lg
-                  <%= user_signed_in? ? 'max-w-3xl mx-auto w-full' : 'max-w-md w-full text-center' %>"><%= alert %></p>
+      <div class="fixed z-50 right-4 lg:right-6 max-w-xs w-full <%= user_signed_in? ? 'top-16 lg:top-4' : 'top-4' %>">
+        <p class="bg-danger-soft text-danger text-sm px-4 py-2.5 rounded-lg shadow-md"><%= alert %></p>
       </div>
     <% end %>
 
