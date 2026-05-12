@@ -1,0 +1,48 @@
+<% content_for :title, "Editar perfil · Pegada de Carbono" %>
+
+<div class="max-w-md">
+  <h2 class="text-xl font-bold text-ink mb-6">Editar perfil</h2>
+
+  <div class="card mb-6">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+
+      <div class="space-y-3">
+        <div>
+          <%= f.label :name, "Nome", class: "text-sm text-ink-soft block mb-1" %>
+          <%= f.text_field :name, autofocus: true, class: "input-field" %>
+        </div>
+        <div>
+          <%= f.label :email, "E-mail", class: "text-sm text-ink-soft block mb-1" %>
+          <%= f.email_field :email, autocomplete: "email", class: "input-field" %>
+        </div>
+        <div>
+          <%= f.label :password, "Nova senha", class: "text-sm text-ink-soft block mb-1" %>
+          <% if @minimum_password_length %>
+            <p class="text-xs text-ink-mute mb-1">Mínimo <%= @minimum_password_length %> caracteres</p>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "new-password", placeholder: "deixe em branco para não alterar", class: "input-field" %>
+        </div>
+        <div>
+          <%= f.label :password_confirmation, "Confirmar nova senha", class: "text-sm text-ink-soft block mb-1" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-field" %>
+        </div>
+        <div>
+          <%= f.label :current_password, "Senha atual", class: "text-sm text-ink-soft block mb-1" %>
+          <p class="text-xs text-ink-mute mb-1">Necessária para confirmar as alterações</p>
+          <%= f.password_field :current_password, autocomplete: "current-password", class: "input-field" %>
+        </div>
+        <%= f.submit "Salvar alterações", class: "btn-primary w-full cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card border-danger/30">
+    <h3 class="text-sm font-semibold text-danger mb-2">Zona de perigo</h3>
+    <p class="text-xs text-ink-mute mb-3">Esta ação é permanente e não pode ser desfeita.</p>
+    <%= button_to "Excluir minha conta", registration_path(resource_name),
+        data: { turbo_confirm: "Tem certeza? Todos os seus dados serão removidos permanentemente." },
+        method: :delete,
+        class: "btn-danger text-sm" %>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<% content_for :title, "Redefinir senha · Pegada de Carbono" %>
+
+<div class="min-h-[80vh] flex items-center justify-center py-8">
+  <div class="w-full max-w-sm">
+    <h2 class="text-xl font-bold text-ink mb-6 text-center">Redefinir senha</h2>
+    <div class="card">
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+        <%= render "users/shared/error_messages", resource: resource %>
+        <%= f.hidden_field :reset_password_token %>
+
+        <div class="space-y-3">
+          <div>
+            <%= f.label :password, "Nova senha", class: "text-sm text-ink-soft block mb-1" %>
+            <% if @minimum_password_length %>
+              <p class="text-xs text-ink-mute mb-1">Mínimo <%= @minimum_password_length %> caracteres</p>
+            <% end %>
+            <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "input-field" %>
+          </div>
+          <div>
+            <%= f.label :password_confirmation, "Confirmar nova senha", class: "text-sm text-ink-soft block mb-1" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-field" %>
+          </div>
+          <%= f.submit "Redefinir senha", class: "btn-primary w-full cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

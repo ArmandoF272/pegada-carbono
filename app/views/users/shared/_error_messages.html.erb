@@ -1,0 +1,12 @@
+<% if resource.errors.any? %>
+  <div class="bg-danger-soft border border-red-200 rounded-lg p-3 mb-4">
+    <p class="text-sm font-medium text-danger mb-1">
+      <%= resource.errors.count %> erro(s) encontrado(s):
+    </p>
+    <ul class="list-disc list-inside space-y-0.5">
+      <% resource.errors.full_messages.each do |message| %>
+        <li class="text-xs text-danger"><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

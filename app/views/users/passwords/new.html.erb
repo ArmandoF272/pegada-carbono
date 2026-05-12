@@ -1,0 +1,23 @@
+<% content_for :title, "Esqueci minha senha · Pegada de Carbono" %>
+
+<div class="min-h-[80vh] flex items-center justify-center py-8">
+  <div class="w-full max-w-sm">
+    <h2 class="text-xl font-bold text-ink mb-2 text-center">Esqueceu sua senha?</h2>
+    <p class="text-sm text-ink-mute text-center mb-6">Enviaremos instruções para o seu e-mail.</p>
+    <div class="card">
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%= render "users/shared/error_messages", resource: resource %>
+        <div class="space-y-3">
+          <div>
+            <%= f.label :email, "E-mail", class: "text-sm text-ink-soft block mb-1" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field" %>
+          </div>
+          <%= f.submit "Enviar instruções", class: "btn-primary w-full cursor-pointer" %>
+        </div>
+      <% end %>
+      <div class="mt-4 text-center">
+        <%= link_to "Voltar ao login", new_session_path(resource_name), class: "text-sm text-leaf" %>
+      </div>
+    </div>
+  </div>
+</div>
