@@ -33,6 +33,11 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 
 # Reduces boot times through caching; required in config/boot.rb
+# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
+
 gem "bootsnap", require: false
 
 # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
