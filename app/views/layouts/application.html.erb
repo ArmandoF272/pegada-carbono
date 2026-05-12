@@ -78,17 +78,17 @@
 
     <%# Flash messages %>
     <% if notice.present? %>
-      <div class="fixed z-50 left-0 right-0 px-4
-                  <%= user_signed_in? ? 'top-14 lg:top-4 lg:left-56 lg:px-6' : 'top-4 flex justify-center' %>">
+      <div class="fixed z-50 left-0 right-0 px-4 lg:px-8
+                  <%= user_signed_in? ? 'top-14 lg:top-4 lg:left-56' : 'top-4 flex justify-center' %>">
         <p class="bg-leaf-tint text-leaf text-sm px-4 py-2 rounded-lg border border-leaf-soft
-                  <%= user_signed_in? ? 'max-w-xl' : 'max-w-md w-full text-center' %>"><%= notice %></p>
+                  <%= user_signed_in? ? 'max-w-3xl mx-auto w-full' : 'max-w-md w-full text-center' %>"><%= notice %></p>
       </div>
     <% end %>
     <% if alert.present? %>
-      <div class="fixed z-50 left-0 right-0 px-4
-                  <%= user_signed_in? ? 'top-14 lg:top-4 lg:left-56 lg:px-6' : 'top-4 flex justify-center' %>">
+      <div class="fixed z-50 left-0 right-0 px-4 lg:px-8
+                  <%= user_signed_in? ? 'top-14 lg:top-4 lg:left-56' : 'top-4 flex justify-center' %>">
         <p class="bg-danger-soft text-danger text-sm px-4 py-2 rounded-lg
-                  <%= user_signed_in? ? 'max-w-xl' : 'max-w-md w-full text-center' %>"><%= alert %></p>
+                  <%= user_signed_in? ? 'max-w-3xl mx-auto w-full' : 'max-w-md w-full text-center' %>"><%= alert %></p>
       </div>
     <% end %>
 
