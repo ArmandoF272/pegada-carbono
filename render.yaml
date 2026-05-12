@@ -1,0 +1,18 @@
+databases:
+  - name: pegada-carbono-db
+    plan: free
+
+services:
+  - type: web
+    name: pegada-carbono
+    runtime: docker
+    plan: free
+    envVars:
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pegada-carbono-db
+          property: connectionString
+      - key: RAILS_LOG_LEVEL
+        value: warn
